@@ -140,9 +140,6 @@ static int tegra_boundaries_policy_notifier(struct notifier_block *nb,
 	if (!bypass_safe_max && safe_max_freq)
 		policy->max = min(safe_max_freq, policy->max);
 
-	if (max_freq)
-		policy->max = min(max_freq, policy->max);
-
 	if (policy->min > policy->max)
 		policy->min = policy->max;
 
@@ -311,9 +308,6 @@ static int cpufreq_table_make_from_dt(void)
 
 	/* Fill in scaling table data */
 	for (i = 0, j = 0; j < freqs_num; j++) {
-		/* Check if frequency is out of bounds */
-		if (max_freq && freqs[j] > max_freq)
-			break;
 		if (clk_round_rate(tfreq_priv->cpu_clk, freqs[j] * 1000) > 0) {
 			ftbl[i].driver_data = 0;
 			ftbl[i].frequency = freqs[j];

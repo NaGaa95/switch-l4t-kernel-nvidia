@@ -343,7 +343,7 @@ static struct tegra_dsi_out dsi_l_720p_5_loki_pdata = {
 	.n_data_lanes = 4,
 	.controller_vs = DSI_VS_1,
 	.pixel_format = TEGRA_DSI_PIXEL_FORMAT_24BIT_P,
-	.refresh_rate = 60,
+	.dsi_refresh_rate = 60,
 	.virtual_channel = TEGRA_DSI_VIRTUAL_CHANNEL_0,
 
 	.panel_reset = DSI_PANEL_RESET,

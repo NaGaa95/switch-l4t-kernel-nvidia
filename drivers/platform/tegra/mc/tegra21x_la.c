@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2014-2019, NVIDIA CORPORATION. All rights reserved.
- * Copyright (c) 2021-2023, CTCaer.
+ * Copyright (c) 2021-2024, CTCaer.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -147,14 +147,18 @@ static void program_ptsa(void)
 	WRITE_PTSA_MIN_MAX(p, vicpc, VICPC);
 	WRITE_PTSA_MIN_MAX(p, apb, APB);
 	WRITE_PTSA_MIN_MAX(p, pcx, PCX);
+	WRITE_PTSA_MIN_MAX(p, hdapc, HDAPC);
 	WRITE_PTSA_MIN_MAX(p, host, HOST);
 	WRITE_PTSA_MIN_MAX(p, ahb, AHB);
 	WRITE_PTSA_MIN_MAX(p, sax, SAX);
 	WRITE_PTSA_MIN_MAX(p, aud, AUD);
 	WRITE_PTSA_MIN_MAX(p, sd, SD);
+	WRITE_PTSA_MIN_MAX(p, sdm, SDM);
 	WRITE_PTSA_MIN_MAX(p, usbx, USBX);
 	WRITE_PTSA_MIN_MAX(p, usbd, USBD);
 	WRITE_PTSA_MIN_MAX(p, ftop, FTOP);
+	WRITE_PTSA_MIN_MAX(p, jpg, JPG);
+	WRITE_PTSA_MIN_MAX(p, gk2, GK2);
 }
 
 static void save_ptsa(void)
@@ -180,15 +184,19 @@ static void save_ptsa(void)
 	READ_PTSA_MIN_MAX(p, gk, GK);
 	READ_PTSA_MIN_MAX(p, vicpc, VICPC);
 	READ_PTSA_MIN_MAX(p, apb, APB);
-	READ_PTSA_MIN_MAX(p, apb, APB);
+	READ_PTSA_MIN_MAX(p, pcx, PCX);
+	READ_PTSA_MIN_MAX(p, hdapc, HDAPC);
 	READ_PTSA_MIN_MAX(p, host, HOST);
 	READ_PTSA_MIN_MAX(p, ahb, AHB);
 	READ_PTSA_MIN_MAX(p, sax, SAX);
 	READ_PTSA_MIN_MAX(p, aud, AUD);
 	READ_PTSA_MIN_MAX(p, sd, SD);
+	READ_PTSA_MIN_MAX(p, sdm, SDM);
 	READ_PTSA_MIN_MAX(p, usbx, USBX);
 	READ_PTSA_MIN_MAX(p, usbd, USBD);
 	READ_PTSA_MIN_MAX(p, ftop, FTOP);
+	READ_PTSA_MIN_MAX(p, jpg, JPG);
+	READ_PTSA_MIN_MAX(p, gk2, GK2);
 }
 
 /*
@@ -275,10 +283,12 @@ static void t21x_init_ptsa(void)
 	MC_SET_INIT_PTSA(p, vicpc,   -2, 0);
 	MC_SET_INIT_PTSA(p, apb,     -2, 0);
 	MC_SET_INIT_PTSA(p, pcx,     -2, 0);
+	MC_SET_INIT_PTSA(p, hdapc,   -2, 0);
 	MC_SET_INIT_PTSA(p, host,    -2, 0);
 	MC_SET_INIT_PTSA(p, ahb,     -2, 0);
 	MC_SET_INIT_PTSA(p, sax,     -2, 0);
 	MC_SET_INIT_PTSA(p, sd,      -2, 0);
+	MC_SET_INIT_PTSA(p, sdm,     -2, 0);
 	MC_SET_INIT_PTSA(p, usbx,    -2, 0);
 	MC_SET_INIT_PTSA(p, usbd,    -2, 0);
 	MC_SET_INIT_PTSA(p, ftop,    -2, 0);
@@ -302,7 +312,7 @@ static void t21x_init_ptsa(void)
 	/* FTOP (mpcorew it seems)*/
 	cpu_wr_bw = (get_mem_bw_mbps(emc_freq_mhz) * CPU_WR_BW_PERC) / 100;
 	if (ON_LPDDR4())
-		cpu_rd_bw /= 2;
+		cpu_wr_bw /= 2;
 
 	p->ftop_ptsa_rate = __fraction2dda_fp(lo_gd_fpa * cpu_wr_bw /
 					      low_freq_bw,

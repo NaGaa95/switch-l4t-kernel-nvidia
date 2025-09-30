@@ -847,7 +847,14 @@ void tegra_dsi_init_clock_param(struct tegra_dc *dc)
 	mode = &dc->mode;
 	refresh = tegra_dc_calc_refresh(mode);
 
-	if (!dsi->info.refresh_rate)
+	/* Use panel dsi refresh rate or the calculated refresh rate.
+	 * If panel dsi refresh rate is not set or 0, it allows for multiple
+         * video timings with different refresh rates.
+         * If timings match (w/o pclk), this can't be used as described.
+	 */
+	if (dsi->info.dsi_refresh_rate)
+		dsi->info.refresh_rate = dsi->info.dsi_refresh_rate;
+	else
 		dsi->info.refresh_rate = DIV_ROUND_CLOSEST(refresh, 1000);
 
 	/* Calculate minimum required pixel rate. */
@@ -2208,20 +2215,6 @@ static void tegra_dsi_set_dc_clk(struct tegra_dc *dc,
 static void tegra_dsi_set_dsi_clk(struct tegra_dc *dc,
 			struct tegra_dc_dsi_data *dsi, u32 clk)
 {
-	u32 rm;
-	u32 pclk_khz;
-
-	/* Round up to MHz */
-	rm = clk % 1000;
-	if (rm != 0)
-		clk -= rm;
-
-	/* Set up pixel clock */
-	pclk_khz = (clk * dsi->shift_clk_div.div) /
-				dsi->shift_clk_div.mul;
-
-	dc->mode.pclk = pclk_khz * 1000;
-
 	dc->shift_clk_div.mul = dsi->shift_clk_div.mul;
 	dc->shift_clk_div.div = dsi->shift_clk_div.div;
 

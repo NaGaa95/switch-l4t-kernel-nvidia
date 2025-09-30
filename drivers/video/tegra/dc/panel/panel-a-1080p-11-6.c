@@ -102,7 +102,7 @@ static struct tegra_dsi_out dsi_a_1080p_11_6_pdata = {
 	.video_burst_mode = TEGRA_DSI_VIDEO_NONE_BURST_MODE_WITH_SYNC_END,
 
 	.pixel_format = TEGRA_DSI_PIXEL_FORMAT_24BIT_P,
-	.refresh_rate = 61,
+	.dsi_refresh_rate = 61,
 	.virtual_channel = TEGRA_DSI_VIRTUAL_CHANNEL_0,
 
 	.panel_reset = DSI_PANEL_RESET,

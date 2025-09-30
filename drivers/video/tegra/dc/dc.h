@@ -339,7 +339,8 @@ struct tegra_dsi_board_info {
 struct tegra_dsi_out {
 	u8		n_data_lanes;			/* required */
 	u8		pixel_format;			/* required */
-	u8		refresh_rate;			/* required */
+	u8		refresh_rate;
+	u8		dsi_refresh_rate;
 	u8		rated_refresh_rate;
 	u8		panel_reset;			/* required */
 	u8		virtual_channel;		/* required */

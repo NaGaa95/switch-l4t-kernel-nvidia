@@ -523,8 +523,6 @@ int tegra_dc_program_mode(struct tegra_dc *dc, struct tegra_dc_mode *mode)
 	unsigned long v_sync_width;
 	unsigned long v_active;
 
-	bool skip_pclk_check = false;
-
 	tegra_dc_get(dc);
 
 	if (dc->out_ops && dc->out_ops->modeset_notifier)
@@ -648,12 +646,6 @@ int tegra_dc_program_mode(struct tegra_dc *dc, struct tegra_dc_mode *mode)
 					dsi->shift_clk_div.div) * 2),
 					dsi->shift_clk_div.div);
 
-		/* skip pclk change if divider real div does not match */
-		if (div != ((rate * 2 / pclk) - 2)) {
-			dev_info(&dc->ndev->dev, "dsi clock div corrected\n");
-			skip_pclk_check = true;
-		}
-
 		pclk = rate / ((div + 2) / 2 * 10 + ((div + 2) % 2) * 5) * 10;
 	}
 
@@ -663,7 +655,7 @@ int tegra_dc_program_mode(struct tegra_dc *dc, struct tegra_dc_mode *mode)
 		mode->pclk / 100 * 99, mode->pclk / 100 * 109);
 
 	/* skip pclk range check for TEGRA_DC_OUT_NULL */
-	if (dc->out->type != TEGRA_DC_OUT_NULL && !skip_pclk_check) {
+	if (dc->out->type != TEGRA_DC_OUT_NULL) {
 		if (!pclk || pclk < (mode->pclk / 100 * 99) ||
 			pclk > (mode->pclk / 100 * 109)) {
 			dev_err(&dc->ndev->dev, "pclk out of range!\n");

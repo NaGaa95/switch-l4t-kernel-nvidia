@@ -2,7 +2,7 @@
  * arch/arm/mach-tegra/latency_allowance.c
  *
  * Copyright (C) 2011-2018, NVIDIA CORPORATION. All rights reserved.
- * Copyright (c) 2021-2023, CTCaer.
+ * Copyright (c) 2021-2024, CTCaer.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -415,8 +415,10 @@ static int __init tegra_latency_allowance_init(void)
 {
 	unsigned int i;
 	int ret = 0;
+	int cid;
 
 	init_chip_specific();
+	cid = tegra_get_chip_id();
 
 	for (i = 0; i < cs.la_info_array_size; i++)
 		cs.id_to_index[cs.la_info_array[i].id] = i;
@@ -424,7 +426,7 @@ static int __init tegra_latency_allowance_init(void)
 	for (i = 0; i < cs.la_info_array_size; i++) {
 		if (cs.set_init_la) {
 			ret = cs.set_init_la(cs.la_info_array[i].id, 0);
-			if (ret < 0) {
+			if (ret < 0 && cid != TEGRA210) {
 				if (cs.la_cleanup)
 					cs.la_cleanup();
 				return -1;

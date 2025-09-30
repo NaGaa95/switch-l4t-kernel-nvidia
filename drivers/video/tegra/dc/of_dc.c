@@ -578,11 +578,11 @@ static int parse_disp_default_out(struct platform_device *ndev,
 	 */
 	if (!of_property_read_u32(out_np, "nvidia,out-width", &temp)) {
 		pdata->default_out->width = (unsigned) temp;
-		OF_DC_LOG("out_width %d\n", default_out->width);
+		OF_DC_LOG("out_width %d\n", pdata->default_out->width);
 	}
 	if (!of_property_read_u32(out_np, "nvidia,out-height", &temp)) {
 		pdata->default_out->height = (unsigned) temp;
-		OF_DC_LOG("out_height %d\n", default_out->height);
+		OF_DC_LOG("out_height %d\n", pdata->default_out->height);
 	}
 	if (!of_property_read_u32(out_np, "nvidia,out-rotation", &temp)) {
 		pdata->default_out->rotation = (unsigned) temp;
@@ -654,7 +654,7 @@ static int parse_disp_default_out(struct platform_device *ndev,
 
 	if (!of_property_read_u32(out_np, "nvidia,out-hdcp-policy", &temp)) {
 		pdata->default_out->hdcp_policy = (unsigned)temp;
-		OF_DC_LOG("hdcp_policy = %u\n", default_out->hdcp_policy);
+		OF_DC_LOG("hdcp_policy = %u\n", pdata->default_out->hdcp_policy);
 	} else {
 		pdata->default_out->hdcp_policy =
 #if defined(CONFIG_ANDROID)
@@ -1433,8 +1433,8 @@ static int parse_dsi_settings(struct platform_device *ndev,
 	}
 	if (!of_property_read_u32(np_dsi_panel,
 			"nvidia,dsi-refresh-rate", &temp)) {
-		dsi->refresh_rate = (u8)temp;
-		OF_DC_LOG("dsi refresh rate %d\n", dsi->refresh_rate);
+		dsi->dsi_refresh_rate = (u8)temp;
+		OF_DC_LOG("dsi refresh rate %d\n", dsi->dsi_refresh_rate);
 	}
 	if (!of_property_read_u32(np_dsi_panel,
 			"nvidia,dsi-rated-refresh-rate", &temp)) {
@@ -2992,7 +2992,7 @@ struct tegra_dc_platform_data *of_dc_parse_platform_data(
 
 	if (!of_property_read_u32(np, "nvidia,fbmem-size", &temp)) {
 		pdata->fb->fbmem_size = temp;
-		OF_DC_LOG("fbmem size %u\n", pdata->fb->fbmem_size);
+		OF_DC_LOG("fbmem size %lu\n", pdata->fb->fbmem_size);
 	}
 
 	if (!of_property_read_u32(np, "nvidia,fb-flags", &temp)) {
